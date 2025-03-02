@@ -8,7 +8,7 @@ from extract_parameters import clean_ocr_text, extract_parameters, classify_para
 from ocr_extraction import extract_text_from_image  # Import our functions
 
 # ✅ Load EasyOCR model ONCE (reduces memory load)
-reader = easyocr.Reader(['en'])
+reader = easyocr.Reader(['en'],gpu=False)
 
 
 app = FastAPI()
