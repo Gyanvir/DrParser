@@ -1,40 +1,65 @@
-import easyocr
-from fastapi import FastAPI, File, UploadFile
-from PIL import Image
-import io
-import shutil
 import os
-from extract_parameters import clean_ocr_text, extract_parameters, classify_parameters
-from ocr_extraction import extract_text_from_image  # Import our functions
-
-# ✅ Load EasyOCR model ONCE (reduces memory load)
-reader = easyocr.Reader(['en'],gpu=False)
-
+from fastapi import FastAPI, UploadFile, File, Form
+from fastapi.responses import HTMLResponse
+import PyPDF2
+from extract_parameters import extract_parameters, classify_parameters
 
 app = FastAPI()
 
-UPLOAD_DIR = "uploads"
+UPLOAD_DIR = "uploads" 
 os.makedirs(UPLOAD_DIR, exist_ok=True)  # Create uploads folder if not exists
 
+def extract_text_from_pdf(file_path):
+    # Open the provided PDF
+    with open(file_path, "rb") as file:
+        reader = PyPDF2.PdfReader(file)
+        text = ""
+        # Extract text from each page of the PDF
+        for page_num in range(len(reader.pages)):
+            page = reader.pages[page_num]
+            text += page.extract_text()
+    return text
+
+@app.get("/", response_class=HTMLResponse)
+async def upload_form():
+    return """
+        <html>
+            <body>
+                <h2>Upload PDF and Select Option</h2>
+                <form action="/upload/" method="post" enctype="multipart/form-data">
+                    <label for="dropdown">Choose an option:</label>
+                    <select name="dropdown" id="dropdown">
+                        <option value="1">SAHARA DIAGNOSTICS</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                    </select><br><br>
+                    <input type="file" name="file" accept=".pdf" required><br><br>
+                    <input type="submit" value="Upload">
+                </form>
+            </body>
+        </html>
+    """
+
 @app.post("/upload/")
-async def upload_blood_report(file: UploadFile = File(...)):
+async def upload_blood_report(file: UploadFile = File(...), dropdown: str = Form(...)):
     file_path = f"uploads/{file.filename}"
 
-    # Save file
+    # Save the uploaded PDF file
     with open(file_path, "wb") as buffer:
-        #buffer.write(await file.read())
-        # Read image bytes
-        image_bytes = await file.read()
-        image = Image.open(io.BytesIO(image_bytes))
+        buffer.write(await file.read())
 
-    # # Perform OCR to extract text
-    # extracted_text = extract_text_from_image(file_path)  # Ensure OCR is called
-    # print("Extracted OCR Text:\n", extracted_text)  # Debugging line
-    # Perform OCR using the preloaded model
-    result = reader.readtext(image, detail=0)
+    # Extract text from the PDF
+    extracted_text = extract_text_from_pdf(file_path)
+
+    # Return the extracted text along with the selected dropdown option
+    return {
+        "extracted_text": ext_text,
+        "selected_option": dropdown
+    }
+
 
     # Extract Parameters
-    extracted_data = extract_parameters(result)
+    extracted_data = extract_parameters(ext_text)
     print("Extracted Data:\n", extracted_data)  # Debugging line
 
     # Classify Data
