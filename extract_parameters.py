@@ -200,8 +200,8 @@ if __name__ == "__main__":
     # Load extracted text from pdf
     with open("pdf_text.txt", "r") as f:
         pdf_text = f.read()
-    lab_no = 1
-    lab_selection(lab_no, pdf_text)
+    lab_no = dropdown
+    parameters = lab_selection(lab_no, pdf_text)
     classified_results = classify_parameters(parameters)
     print("Classified Results:", classified_results)
    
