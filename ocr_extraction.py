@@ -1,15 +1,18 @@
-import easyocr
+import pytesseract
+from PIL import Image
 import cv2
+#reduce image size before upload
+img = Image.open("uploads/img.jpg")
+img = img.resize((int(img.width * 0.5), int(img.height * 0.5)))  # Reduce by 50%
 
 # Initialize EasyOCR reader
-reader = easyocr.Reader(['en'])  # 'en' for English
-
+text = pytesseract.image_to_string(img)
 def extract_text_from_image(image_path):
     # Read image
     img = cv2.imread(image_path)
 
     # Extract text
-    results = reader.readtext(img, detail=0)  # detail=0 gives plain text
+    results = text.readtext(img, detail=0)  # detail=0 gives plain text
     extracted_text = "\n".join(results)
 
     return extracted_text
