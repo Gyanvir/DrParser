@@ -57,7 +57,9 @@ async def upload_blood_report(file: UploadFile = File(...), dropdown: str = Form
         "selected_option": dropdown
     }
 
-
+    lab_no = dropdown
+    parameters = lab_selection(lab_no, ext_text)
+    
     # Extract Parameters
     extracted_data = extract_parameters(ext_text)
     print("Extracted Data:\n", extracted_data)  # Debugging line
@@ -66,5 +68,5 @@ async def upload_blood_report(file: UploadFile = File(...), dropdown: str = Form
     classified_data = classify_parameters(extracted_data)
     print("Classified Data:\n", classified_data)  # Debugging line
 
-    return {"extracted_text": result, "extracted_data": extracted_data, "classified_data": classified_data}
+    return {"lab_no": dropdown, "extracted_data": extracted_data, "classified_data": classified_data}
 
