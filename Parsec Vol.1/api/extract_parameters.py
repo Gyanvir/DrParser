@@ -165,8 +165,10 @@ def classify_parameters(extracted_data):
                 continue  
 
             # 🔹 Classification Logic
-            if value < lower or value > upper:
-                classification["Critical"].append((param, value))
+            if value < lower :
+                classification["Critical"].append((param, value,"Low"))
+            elif value > upper:
+                classification["Critical"].append((param, value,"High"))
             elif lower * 0.9 <= value <= upper * 1.1:  # Borderline = ±10%
                 classification["Borderline"].append((param, value))
             else:
