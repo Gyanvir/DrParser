@@ -8,6 +8,9 @@ import io
 from extract_parameters import clean_ocr_text, extract_parameters, classify_parameters
 from ocr_extraction import extract_text_from_image  # Import our functions
 from fastapi.middleware.cors import CORSMiddleware
+from google import genai
+from markdown import markdown
+import re
 
 
 app = FastAPI()
@@ -40,6 +43,39 @@ def process_pdf(pdf_path):
     return " ".join(extracted_text)
 
 
+def markdown_to_html_table(markdown_table):
+    """Convert Markdown table to a proper HTML table."""
+    rows = markdown_table.strip().split("\n")
+
+    if not rows or len(rows) < 3:
+        return "<p>No valid table data</p>"
+
+    # Extract header and data rows
+    header = rows[0].split("|")[1:-1]  # Remove empty first and last elements
+    data_rows = [row.split("|")[1:-1] for row in rows[2:]]
+
+    # Build HTML table
+    table_html = "<table class='border-collapse border border-gray-500 w-full'>"
+    table_html += "<thead><tr>" + "".join(f"<th class='border border-gray-500 p-2'>{col.strip()}</th>" for col in header) + "</tr></thead>"
+    table_html += "<tbody>"
+    for row in data_rows:
+        table_html += "<tr>" + "".join(f"<td class='border border-gray-500 p-2'>{col.strip()}</td>" for col in row) + "</tr>"
+    table_html += "</tbody></table>"
+
+    return table_html
+def process_markdown_table(markdown_table):
+    """Convert Markdown table to structured JSON for React frontend."""
+    rows = markdown_table.strip().split("\n")
+    if len(rows) < 3:
+        return {"headers": [], "rows": []}
+
+    headers = [col.strip() for col in rows[0].split("|")[1:-1]]
+    data_rows = [[col.strip() for col in row.split("|")[1:-1]] for row in rows[2:]]
+
+    return {"headers": headers, "rows": data_rows}
+
+
+
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)  # Create uploads folder if not exists
 
@@ -67,8 +103,35 @@ async def upload_blood_report(file: UploadFile = File(...)):
     extracted_data = extract_parameters(extracted_text)
     print("Extracted Data Before Classification:", extracted_data)  # Debugging print
     classified_data = classify_parameters(extracted_data)
+        
+    Category = list(classified_data.keys())
+    table_txt = ""
+    for i in classified_data[Category[0]]:
+        client = genai.Client(api_key="AIzaSyBpJg5IAB6iykrpg8di15wJ6tL8Bumvhtc")
+        # response1 = client.models.generate_content(
+        #     model="gemini-2.0-flash", contents=f"List the diseases happen and causes if {i[0]} is {i[2]} in 10-20 words."
+        # )
+        response1 = client.models.generate_content(
+            model="gemini-2.0-flash", 
+            contents=f"List the diseases happen and causes if {i[0]} is {i[2]} in 10-20 words."
+        )
+        table_txt += response1.candidates[0].content.parts[0].text
 
-    
+    client = genai.Client(api_key="AIzaSyBpJg5IAB6iykrpg8di15wJ6tL8Bumvhtc")
+    response2 = client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=f"List {table_txt} in a table with test name, low/high, disease, causes as columns. Give only table No other text."
+    )
+    final_table=response2.candidates[0].content.parts[0].text
+    # Convert Markdown table to HTML
+    # final_table_html = markdown_to_html_table(final_table)
+    table_data=process_markdown_table(final_table)
 
-    return {"extracted_data": extracted_text, "classified_data": classified_data}
-
+    return {
+    'extracted_data': extracted_text,
+    'classified_data': classified_data,
+    'final_table_headers': table_data["headers"],
+    'final_table_rows': table_data["rows"],
+    }
+if __name__ == '__main__':
+    app.run(debug=True)
