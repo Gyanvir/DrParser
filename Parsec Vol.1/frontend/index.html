@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Blood Report Parser</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo">AI Blood Parser</div>
+        <nav class="nav">
+            <ul>
+                <li><a class="item" href="#about">About Us</a></li>
+                <li><a class="item" href="#aim">Our Aim</a></li>
+                <li><a class="item" href="#duty">Social Duty</a></li>
+                <li><a class="item" href="#recommendations">Recommendations</a></li>
+                <li><a class="item" href="#vision">Future Vision</a></li>
+                <li><a class="item" href="#contact">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>AI-Powered Blood Report Analysis</h1>
+        <p><strong>Upload your blood test report and get instant insights into your health!</strong></p>
+
+        <!-- File Upload -->
+        <form id="uploadForm">
+            <input type="file" id="fileUpload" accept="image/*,.pdf">
+            <!-- <button type="button" class="pdf_up" onclick="uploadFile()">Upload</button> -->
+            <!-- <button type="button" class="pdf_up" onclick="window.location.href='results.html'">Upload</button> -->
+            <button type="button" class="pdf_up" onclick="uploadFile()">Upload</button>
+
+            <!-- <button  onclick="window.location.href='results.html'">Upload Another Report</button> -->
+        </form>
+        <!-- <div class="file-upload-container" onclick="document.getElementById('fileUpload').click();">
+            <p>Click or Drag & Drop to Upload Report</p>
+            <input type="file" id="fileUpload" accept="image/*,.pdf" style="display: none;" onchange="uploadFile()">
+        </div> -->
+        <!-- <button class="pdf_up" onclick="uploadFile()">Upload</button> -->
+    </section>
+    <section id="resultsSection">
+        <div id="extracted-data"></div>
+        <div id="classified-data"></div>
+        <h2>Extracted Data</h2>
+        <p id="extractedText">Upload a report to see extracted text here...</p>
+        
+        <h2>Analysis Table</h2>
+        <div id="results"></div>
+    </section>
+    
+    <!-- About Section -->
+    <section id="about">
+        <h2>About Us</h2>
+        <p>We are a team dedicated to simplifying blood report analysis through AI...</p>
+    </section>
+    <section id="aim">
+        <h2>Our Aim</h2>
+        <p>Our AI-driven platform helps users interpret their blood reports...</p>
+    </section>
+
+    <section id="duty">
+        <h2>Social Duty</h2>
+        <p>We believe in accessible healthcare for everyone...</p>
+    </section>
+
+    <!-- Recommendations Section -->
+    <section id="recommendations">
+        <h2>Recommendations</h2>
+        <div class="all_recommendations" id="all_recommendations">
+            <div class="recommendation"><span>&#8220;</span> This is the best web application <span>&#8221;</span></div>
+            <div class="recommendation"><span>&#8220;</span> Loved it! <span>&#8221;</span></div>
+            <div class="recommendation"><span>&#8220;</span> I am satisfied with this web application <span>&#8221;</span></div>
+        </div>
+    </section>
+
+    <!-- Leave Recommendation -->
+    <div id="contact">
+        <fieldset>
+            <legend class="introduction">Leave a Recommendation</legend>
+            <textarea id="new_recommendation" placeholder="Message"></textarea>
+            <div class="flex_center">
+                <button id="recommend_btn" onclick="addRecommendation()">Submit</button>
+            </div>
+        </fieldset>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <div class="iconbutton">
+        <a href="#home">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" width="48px">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11.25l-3-3m0 0l-3 3m3-3v7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Made by the team Euphoria with ❤️</p>
+        <p>© All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for Upload & Recommendations -->
+    <script>
+        // function uploadFile() {
+        //         const fileInput = document.getElementById("fileUpload");
+        //         if (fileInput.files.length === 0) {
+        //             alert("Please select a file first.");
+        //             return;
+        //         }
+
+        //         const file = fileInput.files[0];
+        //         const formData = new FormData();
+        //         formData.append("file", file);
+
+        //         fetch("http://127.0.0.1:8000/upload/", {  // Ensure FastAPI is running
+        //             method: "POST",
+        //             body: formData
+        //         })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             if (data.error) {
+        //                 alert("Error: " + data.error);
+        //                 return;
+        //             }
+                    
+        //             // Display the extracted text and table data
+        //             document.getElementById("upload-form").addEventListener("submit", async function (event) {
+        //             event.preventDefault();
+
+        //             let formData = new FormData();
+        //             let fileInput = document.getElementById("file-upload");
+        //             formData.append("file", fileInput.files[0]);
+
+        //             try {
+        //                 let response = await fetch("http://127.0.0.1:8000/upload/", {
+        //                     method: "POST",
+        //                     body: formData
+        //                 });
+
+        //                 let result = await response.json();
+        //                 console.log("Frontend Received Response:", result);  // Debugging log
+                        
+
+        //                 if (!response.ok) {
+        //                     throw new Error(result.error || "Upload failed.");
+        //                 }
+
+        //                 // ✅ Update UI with extracted data
+        //                 document.getElementById("extracted-data").innerText =
+        //                     JSON.stringify(result, null, 2);
+        //                 window.location.href = "results.html";
+        //                 alert("Upload Successful!");
+        //             } catch (error) {
+        //                 alert("Upload failed. Please try again.");
+        //                 console.error("Error:", error);
+        //             }
+        //         });
+
+        //     });
+        // }
+        function uploadFile() {
+            const fileInput = document.getElementById("fileUpload");
+            if (fileInput.files.length === 0) {
+                alert("Please select a file first.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("http://127.0.0.1:8000/upload/", {  
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Error: " + data.error);
+                    return;
+                }
+
+                console.log("Frontend Received Response:", data);  // Debugging log
+                
+                // Store the response data in localStorage
+                localStorage.setItem("extracted_data", JSON.stringify(data));
+
+                // Redirect after storing data
+                setTimeout(() => {
+                    window.location.href = "results.html";
+                }, 500);  // Small delay to ensure data is stored
+            })
+            .catch(error => {
+                console.error("Upload failed:", error);
+                alert("Upload failed. Please try again.");
+            });
+        }
+
+
+        function addRecommendation() {
+            let recommendationText = document.getElementById("new_recommendation").value.trim();
+            if (recommendationText === "") {
+                alert("Please enter a recommendation before submitting.");
+                return;
+            }
+
+            let newRec = document.createElement("div");
+            newRec.classList.add("recommendation");
+            newRec.innerHTML = `<span>&#8220;</span> ${recommendationText} <span>&#8221;</span>`;
+
+            document.getElementById("all_recommendations").appendChild(newRec);
+            document.getElementById("new_recommendation").value = "";
+        }
+    </script>
+
+</body>
+</html>

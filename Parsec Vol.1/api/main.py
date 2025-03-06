@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Request
 from pdf2image import convert_from_path
 import easyocr
 import shutil
@@ -11,7 +11,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from google import genai
 from markdown import markdown
 import re
-
+from fastapi.responses import JSONResponse
+# from fastapi.templating import Jinja2Templates
+# import uvicorn
 
 app = FastAPI()
 app.add_middleware(
@@ -22,6 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 reader = easyocr.Reader(["en"])  # Initialize EasyOCR with English language
+# templates = Jinja2Templates(directory="templates")
 
 def process_image(image_path):
     """Extract text from an image using EasyOCR"""
@@ -79,6 +82,14 @@ def process_markdown_table(markdown_table):
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)  # Create uploads folder if not exists
 
+
+# @app.get("/")
+# def index(request: Request):
+#     return templates.TemplateResponse(
+#         name="index.html",
+#         context={"request": request}
+#     )
+
 @app.post("/upload/")
 async def upload_blood_report(file: UploadFile = File(...)):
     # file_path = f"uploads/{file.filename}"
@@ -126,12 +137,14 @@ async def upload_blood_report(file: UploadFile = File(...)):
     # Convert Markdown table to HTML
     # final_table_html = markdown_to_html_table(final_table)
     table_data=process_markdown_table(final_table)
-
-    return {
-    'extracted_data': extracted_text,
+    response_data = {
+        'extracted_data': extracted_text,
     'classified_data': classified_data,
     'final_table_headers': table_data["headers"],
     'final_table_rows': table_data["rows"],
     }
+    print("Backend Response:", response_data)  # Debugging log
+    return JSONResponse(content=response_data)  # Ensure JSON response
 if __name__ == '__main__':
     app.run(debug=True)
+    

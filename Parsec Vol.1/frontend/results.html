@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Report Results</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">AI Blood Parser</div>
+        <nav class="nav">
+            <ul>
+                <li><a class="item" href="index.html">Home</a></li>
+                <li><a class="item" href="#about">About Us</a></li>
+                <li><a class="item" href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Results Section -->
+    <section id="results">
+        <h2>Blood Report Analysis</h2>
+        <p><strong>Here are your extracted health insights:</strong></p>
+
+        <div id="report-container">
+            <p>Loading results...</p> <!-- This will be replaced dynamically -->
+        </div>
+
+        <button class="pdf_up" onclick="window.location.href='index.html'">Upload Another Report</button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Made by the team Euphoria with ❤️</p>
+        <p>© All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript to Fetch Results -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const reportContainer = document.getElementById("report-container");
+            // Debugging log
+            console.log("Checking Local Storage for Data...");
+            // Retrieve stored data from localStorage
+            const storedData = localStorage.getItem("extracted_data");
+            if (!storedData) {
+                console.log("No data found in Local Storage.");
+                reportContainer.innerHTML = "<p>No report data found. Please upload again.</p>";
+                return;
+            }
+
+            const data = JSON.parse(storedData);
+            console.log("Loaded Data:", data);
+
+            // Display extracted data
+            let resultsHTML = "<h3>Extracted Data</h3><p>" + (data.extracted_data || "No extracted data found.") + "</p>";
+
+            // Display classified data
+            resultsHTML += "<h3>Classified Data</h3><p>" + JSON.stringify(data.classified_data, null, 2) + "</p>";
+
+            // Display table if available
+            if (data.final_table_headers && data.final_table_rows) {
+                resultsHTML += "<h3>Analysis Table</h3><table border='1'><tr>";
+                data.final_table_headers.forEach(header => {
+                    resultsHTML += `<th>${header}</th>`;
+                });
+                resultsHTML += "</tr>";
+                data.final_table_rows.forEach(row => {
+                    resultsHTML += "<tr>";
+                    row.forEach(cell => {
+                        resultsHTML += `<td>${cell}</td>`;
+                    });
+                    resultsHTML += "</tr>";
+                });
+                resultsHTML += "</table>";
+            }
+
+            reportContainer.innerHTML = resultsHTML;
+        });
+
+    </script>
+
+</body>
+</html>
