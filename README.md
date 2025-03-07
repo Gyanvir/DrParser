@@ -1,6 +1,6 @@
 # Dr.Parser
 
-![Dr.Parser Banner](your_image_link_here)
+![Dr.Parser Banner](DrParser.png)
 
 ## 🚀 Overview
 Dr.Parser is an AI-powered blood report analysis tool designed to extract, interpret, and present key health metrics from medical reports. Our goal is to make medical diagnostics more accessible and understandable for both healthcare professionals and individuals.
