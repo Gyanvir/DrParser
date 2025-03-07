@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Blood Parser</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header id="home">
+        <div class="logo"><img src="blood-drop-logo.jpg">AI Blood Parser</div>
+        <nav>
+            <ul>
+                <li><a class="item" href="#about">About Us</a></li>
+                <li><a class="item" href="#aim">Our Aim</a></li>
+                <li><a class="item" href="#duty">Social Duty</a></li>
+                <li><a class="item" href="#vision">Future Vision</a></li>
+                <li><a class="item" href="#recommendations">Recommendations</a></li>
+                <li><a class="item" href="#contact">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <img src="euphoria_logo.jpg">
+        <h1>AI-Powered Blood Report Analysis</h1>
+        <p><strong>Upload your blood test report and get instant insights into your health!</strong></p>
+        <div class="int"><input class="int" type="file" id="fileUpload" accept="image/*,.pdf"></div>
+        <button class="pdf_up" onclick="uploadFile()">Upload</button>
+    </section>
+
+    <section id="results">
+        <h2>REPORT ANALYSIS</h2>
+        <div id="analysisOutput" class="result-box" ></div>
+
+        
+    </section>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <p>"At Euphoria, we believe that technology should serve humanity in the most profound ways. Our AI Blood Parser is designed to bridge the gap between raw medical data and meaningful insights, ensuring that everyone, regardless of expertise, can understand their health better. By leveraging cutting-edge artificial intelligence, we aim to transform the way people interact with their medical reports—making healthcare more accessible, transparent, and proactive."</p>
+    </section>
+
+    <section id="aim">
+        <h2>Our Aim</h2>
+        <p>"Our mission is to revolutionize the field of medical diagnostics through AI-driven precision. We strive to empower individuals with instant, accurate, and easy-to-understand health insights, helping them take charge of their well-being. By automating the analysis of blood reports, we not only reduce the time and effort required for interpretation but also enhance early detection of potential health risks. At Euphoria, we envision a world where technology and healthcare work hand in hand to create a future where informed decisions lead to healthier lives."</p>
+    </section>
+
+    <section id="duty">
+        <h2>Social Duty</h2>
+        <p>"At Euphoria, we believe healthcare should be accessible to all. Our AI Blood Parser empowers individuals by providing free, AI-driven insights into their blood reports. We aim to bridge the gap between medical expertise and public awareness, ensuring everyone can understand their health better. By promoting early detection and preventive care, we strive to create a healthier and more informed society."</p>
+    </section>
+
+    <section id="vision">
+        <h2>Future Vision</h2>
+        <p>"Euphoria is dedicated to enhancing AI Blood Parser with higher accuracy and multilingual support. We aim to introduce disease trend analysis for early detection. Our AI will evolve into a predictive health tool, identifying risks before they escalate. By merging diagnostics with prevention, we ensure proactive healthcare. Our mission is to make medical insights accessible to all."</p>
+    </section>
+
+    <section id="rec">
+        <!-- Recommendations -->
+        <section id="recommendations">
+            <h2>Recommendations</h2>
+            <div class="all_recommendations" id="all_recommendations">
+                <div class="recommendation">
+                    <span>&#8220;</span>
+                    This is best web application
+                    <span>&#8221;</span>
+                </div>
+                <div class="recommendation">
+                    <span>&#8220;</span>
+                    Loved it!
+                    <span>&#8221;</span>
+                </div>
+                <div class="recommendation">
+                    <span>&#8220;</span>
+                    I am satisfied with this web application
+                    <span>&#8221;</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recommendation Form -->
+        <div id="contact">
+            <fieldset>
+                <div class="lev">
+                    <legend class="introduction">Leave a Recommendation</legend>
+                </div>
+                <textarea id="new_recommendation" cols="500" rows="10" placeholder="Write your recommendation..."></textarea>
+                <div class="flex_center">
+                    <button id="recommend_btn" onclick="addRecommendation()">Submit</button>
+                </div>
+                <div class="all_recommendations" id="all_recommendations"></div>
+            </fieldset>
+        </div>
+    </section>
+
+    <div class="iconbutton">
+        <a href="#home">
+            <!--Add the code here for the logo to appear and the icon to be actionable-->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white"
+                width="63px">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15 11.25l-3-3m0 0l-3 3m3-3v7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </a>
+    </div>
+
+
+    <footer>
+        <p>Made with 💖 by team Euphoria</p>
+        <p>© All rights reserved.</p>
+    </footer>
+
+    <script>
+        // let uploadFileResult = [];
+        async function uploadFile() {
+            // alert('Uploading... Please wait');
+            // setTimeout(() => {
+            //     window.location.href = 'results.html';
+            // }, 2000);
+            const getfile = document.getElementById("fileUpload").value;
+            const formData = new FormData();
+            formData.append("file", getfile);
+
+            const response = await fetch("http://localhost:8000/upload/", {
+                method: "POST",
+                body: formData
+            });
+
+            const result = await response.json();
+            console.log(result)
+            // uploadFileResult = result;
+            sessionStorage.setItem("uploadreportResult",result)
+        }
+
+        async function uploadFile() {
+            const fileInput = document.getElementById("fileUpload");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file first.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const response = await fetch("http://localhost:8000/upload/", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const result = await response.json();
+                console.log("Upload Response:", result);
+
+                // Store response in sessionStorage
+                sessionStorage.setItem("uploadreportResult", JSON.stringify(result));
+
+                // Display response on the page
+                displayResult(result);
+            } catch (error) {
+                console.error("Upload failed:", error);
+                alert("Upload failed. Please try again.");
+            }
+        }
+
+        function displayResult(data) {
+            const outputDiv = document.getElementById("analysisOutput");
+            outputDiv.innerHTML = "";
+
+            if (!data) {
+                outputDiv.innerHTML = "<p>No data available.</p>";
+                return;
+            }
+
+            let resultHTML = `
+            <div class="mt-6 p-4 bg-white rounded-lg shadow-md w-full max-w-2xl">
+                    <h3 class="text-xl font-semibold mt-4">Classified Data:</h3>
+                    <table class="w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="border p-2">Category</th>
+                                <th class="border p-2">Parameters</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${Object.entries(data.classified_data)
+                                .map(([category, values]) => `
+                                    <tr>
+                                        <td class="border p-2 font-semibold">${category}</td>
+                                        <td class="border p-2">
+                                            ${values.length > 0 ? values.map(([param, value]) => `<div>${param}: ${value}</div>`).join('') : "None"}
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                        </tbody>
+                    </table>
+
+                    <div class="overflow-x-auto">
+                        <h3 class="text-xl font-semibold mb-2">Parsec Analysis:</h3>
+                        <table class="w-full border-collapse border border-gray-300 shadow-md bg-white">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 p-2 font-bold">Test Name</th>
+                                    <th class="border border-gray-300 p-2 font-bold">Low/High</th>
+                                    <th class="border border-gray-300 p-2 font-bold">Disease</th>
+                                    <th class="border border-gray-300 p-2 font-bold">Causes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.final_table_rows
+                                    .map(row => `
+                                        <tr class="bg-gray-${data.final_table_rows.indexOf(row) % 2 === 0 ? '100' : 'white'}">
+                                            ${row.map(cell => `<td class="border border-gray-300 px-4 py-2">${cell}</td>`).join('')}
+                                        </tr>
+                                    `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>`;
+
+            outputDiv.innerHTML = resultHTML;
+        }
+
+        // Restore data on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            const storedData = sessionStorage.getItem("uploadreportResult");
+            if (storedData) {
+                displayResult(JSON.parse(storedData));
+            }
+        });
+
+
+        function addRecommendation() {
+            let recommendation = document.getElementById("new_recommendation").value.trim();
+            if (recommendation === "") {
+                alert("Please enter a recommendation before submitting.");
+                return;
+            }
+
+            let recommendationContainer = document.getElementById("all_recommendations");
+            let newElement = document.createElement("div");
+            newElement.className = "recommendation";
+            newElement.innerHTML = `
+                <span>&#8220;</span> ${recommendation} <span>&#8221;</span>
+            `;
+            recommendationContainer.appendChild(newElement);
+
+            document.getElementById("new_recommendation").value = "";
+        }
+
+    </script>
+</body>
+
+</html>
