@@ -26,8 +26,8 @@ To set up the project on your local machine, follow these steps:
 
 ### 1️⃣ Clone the Repository
 ```sh
-git clone https://github.com/your-repo-link.git
-cd your-repo-folder
+git clone https://github.com/Gyanvir/DrParser.git
+cd Parsec Vol.1
 ```
 
 ### 2️⃣ Set Up the Python Backend (API)
