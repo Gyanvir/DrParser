@@ -6,7 +6,7 @@
 Dr.Parser is an AI-powered blood report analysis tool designed to extract, interpret, and present key health metrics from medical reports. Our goal is to make medical diagnostics more accessible and understandable for both healthcare professionals and individuals.
 
 ## 🏆 About the Project
-Developed for the **Health-Tech and AI Hackathon** at **IIT (BHU)**, Dr.Parser is our take on simplifying medical report analysis. While we may not be the most technically advanced team, our strength lies in execution. We believe in the power of innovation and dedication, and if selected, we are eager to take this project to new heights.
+Dr.Parser is our take on simplifying medical report analysis. While we may not be the most technically advanced team, our strength lies in execution. We believe in the power of innovation and dedication, and if selected, we are eager to take this project to new heights.
 
 ## 💡 Why No Deployment?
 Since Dr.Parser includes an ML-based backend, deploying it on a cloud engine would require resources beyond our current capacity. However, we have ensured that everything is well-documented so that you can run it locally without issues.
@@ -16,10 +16,10 @@ Even if this project doesn’t seem technically extravagant, we promise to give 
 ---
 
 ## 🛠 Tech Stack & Tools Used
-- **Frontend:** React.js (Material-UI, Redux)
+- **Frontend:** React.js, HTML, CSS 
 - **Backend:** FastAPI
-- **AI/ML:** EasyOCR, OpenCV, Gemini AI
-- **Database & Caching:** MongoDB, Redis
+- **AI/ML:** EasyOCR, Gemini AI
+  
 
 ## 📥 Installation & Setup (Run Locally)
 To set up the project on your local machine, follow these steps:
@@ -112,8 +112,8 @@ Developed by:
 
 ---
 
-## 📝 Judging Criteria & Compliance
-This project meets the hackathon's judging criteria:
+## 📝 Evaluation Criteria & Compliance
+This project meets the following evaluation criteria:
 ✅ **Functionality:** Fully working local setup.
 ✅ **Code Quality:** Well-structured and documented.
 ✅ **Scalability:** Designed for future improvements.
