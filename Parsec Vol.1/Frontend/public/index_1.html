@@ -31,7 +31,7 @@
         <button class="pdf_up" onclick="uploadFile()">Upload</button>
     </section>
 
-    <section id="results">
+    <section id="results" style="display: none;">
         <h2>REPORT ANALYSIS</h2>
         <div id="analysisOutput" class="result-box" ></div>
 
@@ -114,34 +114,21 @@
     </footer>
 
     <script>
-        // let uploadFileResult = [];
-        async function uploadFile() {
-            // alert('Uploading... Please wait');
-            // setTimeout(() => {
-            //     window.location.href = 'results.html';
-            // }, 2000);
-            const getfile = document.getElementById("fileUpload").value;
-            const formData = new FormData();
-            formData.append("file", getfile);
 
-            const response = await fetch("http://localhost:8000/upload/", {
-                method: "POST",
-                body: formData
-            });
-
-            const result = await response.json();
-            console.log(result)
-            // uploadFileResult = result;
-            sessionStorage.setItem("uploadreportResult",result)
-        }
 
         async function uploadFile() {
             const fileInput = document.getElementById("fileUpload");
+            const uploadButton = document.querySelector(".pdf_up");
             const file = fileInput.files[0];
             if (!file) {
                 alert("Please select a file first.");
                 return;
             }
+
+            // Disable the button
+            uploadButton.disabled = true;
+            uploadButton.innerText = "Uploading...";
+
 
             const formData = new FormData();
             formData.append("file", file);
@@ -163,17 +150,25 @@
             } catch (error) {
                 console.error("Upload failed:", error);
                 alert("Upload failed. Please try again.");
+            } finally{
+                uploadButton.disabled = false;
+                uploadButton.innerText = "UPLOAD";
             }
         }
 
         function displayResult(data) {
+            const resultsSection = document.getElementById("results");
             const outputDiv = document.getElementById("analysisOutput");
             outputDiv.innerHTML = "";
 
             if (!data) {
                 outputDiv.innerHTML = "<p>No data available.</p>";
+                resultsSection.style.display = "none"; // Hide section if no data
                 return;
             }
+
+            // Show the result section when data is available
+            resultsSection.style.display = "block";
 
             let resultHTML = `
             <div class="mt-6 p-4 bg-white rounded-lg shadow-md w-full max-w-2xl">
