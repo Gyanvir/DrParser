@@ -156,7 +156,7 @@ input[type="file"] {
 .pdf_up {
     padding: 12px 24px;
     font-size: 18px;
-    background-color: #ff330f;
+    background-color: #ff1e00;
     color: white;
     border: none;
     cursor: pointer;
@@ -164,7 +164,7 @@ input[type="file"] {
     transition: 0.3s;
 }
 .pdf_up:hover {
-    background-color: #ff1e00;
+    background-color: #ff3a17;
 }
 
 #results {
@@ -208,9 +208,6 @@ input[type="file"] {
     margin: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-p {
-    font-style: italic;
 }
 
 /* Recommendations */
