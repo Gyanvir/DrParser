@@ -69,8 +69,8 @@ When you press the **Upload** button, kindly wait patiently for the analysis to 
 ## 🌟 Features
 - **OCR-Powered Report Parsing:** Extracts key health parameters from blood reports.
 - **AI-Based Analysis:** Provides insights using Gemini AI.
-- **User-Friendly Interface:** Built with Material-UI for a smooth experience.
-- **Scalable Architecture:** Designed with MongoDB and Redis for future improvements.
+- **User-Friendly Interface:** Built with basic HTML, CSS, JS for a smooth experience.
+- **Scalable Architecture:** Designed with React and Python to aid future improvements.
 
 ---
 
@@ -114,10 +114,10 @@ Developed by:
 
 ## 📝 Evaluation Criteria & Compliance
 This project meets the following evaluation criteria:
-✅ **Functionality:** Fully working local setup.
-✅ **Code Quality:** Well-structured and documented.
-✅ **Scalability:** Designed for future improvements.
-✅ **Innovation:** AI-driven medical analysis.
+-✅ **Functionality:** Fully working local setup.
+-✅ **Code Quality:** Well-structured and documented.
+-✅ **Scalability:** Designed for future improvements.
+-✅ **Innovation:** AI-driven medical analysis.
 
 ---
 
