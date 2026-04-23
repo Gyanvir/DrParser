@@ -1,7 +1,5 @@
 # Dr.Parser
 
-![Volentify Logo](https://github.com/user-attachments/assets/77c86f67-4b77-41e5-8348-2bd15f38add6)
-
 
 ## 🚀 Overview
 Dr.Parser is an AI-powered blood report analysis tool designed to extract, interpret, and present key health metrics from medical reports. Our goal is to make medical diagnostics more accessible and understandable for both healthcare professionals and individuals.
