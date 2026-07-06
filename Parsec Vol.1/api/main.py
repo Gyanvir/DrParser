@@ -11,6 +11,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from google import genai
 from markdown import markdown
 import re
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 app = FastAPI()
@@ -107,7 +110,7 @@ async def upload_blood_report(file: UploadFile = File(...)):
     Category = list(classified_data.keys())
     table_txt = ""
     for i in classified_data[Category[0]]:
-        client = genai.Client(api_key="AIzaSyBpJg5IAB6iykrpg8di15wJ6tL8Bumvhtc")
+        client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY") )
         # response1 = client.models.generate_content(
         #     model="gemini-2.0-flash", contents=f"List the diseases happen and causes if {i[0]} is {i[2]} in 10-20 words."
         # )
